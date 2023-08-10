@@ -2,6 +2,20 @@ import { useState } from "react";
 
 export default function App() {
   const [newItem, setNewItem] = useState("");
+  const [todos, setTodos] = useState([]);
+
+  function handleSubmit(e) {
+    e.preventDefault();
+
+    setTodos((currentTodos) => {
+      return [
+        ...currentTodos,
+        { id: crypto.randomUUID(), title: newItem, completed: false },
+      ];
+    });
+
+    setNewItem("");
+  }
 
   return (
     <>
@@ -20,20 +34,17 @@ export default function App() {
       </form>
       <h1 className="header">To-Do List</h1>
       <ul className="list">
-        <li>
-          <label>
-            <input type="checkbox" />
-            Item 1
-          </label>
-          <button className="btn btn-danger">Delete</button>
-        </li>
-        <li>
-          <label>
-            <input type="checkbox" />
-            Item 2
-          </label>
-          <button className="btn btn-danger">Delete</button>
-        </li>
+        {todos.map((todo) => {
+          return (
+            <li key={todo.id}>
+              <label>
+                <input type="checkbox" checked={todo.completed} />
+                {todo.title}
+              </label>
+              <button>Delete</button>
+            </li>
+          );
+        })}
       </ul>
     </>
   );
